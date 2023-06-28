@@ -1,6 +1,5 @@
 import { useDirectus } from '@directus/sdk'
-import { rest } from '@directus/sdk/rest'
-import { readItem } from '@directus/sdk/rest/commands';
+import { rest, readItems } from '@directus/sdk/rest'
 
 import { DIRECTUS_URL } from '$env/static/private';
 
@@ -17,12 +16,10 @@ interface Schema {
 }
 
 const client = useDirectus<Schema>(DIRECTUS_URL).use(rest());
-const posts = await client.request(readItem('posts', 5));
-
-console.log(posts)
+const posts = await client.request(readItems('posts')) as unknown as BlogPosts[]
 
 export const load = async () => {
     return {
-        success: true
+        posts
     }
 };
