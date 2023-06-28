@@ -1,8 +1,6 @@
 <script lang="ts">
 	import Content from '$layout/Content.svelte';
 	export let data;
-
-	console.log(data);
 </script>
 
 <Content>

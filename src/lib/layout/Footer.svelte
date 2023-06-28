@@ -15,7 +15,7 @@
 <style>
 	footer {
 		background-color: white;
-		padding-top: 2rem;
+		padding: 2rem 0;
 		position: sticky;
 		top: 100vh;
 		border-top: 1px solid #ccc;
