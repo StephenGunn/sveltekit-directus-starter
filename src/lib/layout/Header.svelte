@@ -5,7 +5,7 @@
 	<div class="column site-head">
 		<a href=".">SvelteKit + Directus Starter</a>
 		<nav>
-			<a href="/about">About</a>
+			<a href="/blog">Blog</a>
 			<a href="/login">Login</a>
 			<a href="/register">Register</a>
 		</nav>
