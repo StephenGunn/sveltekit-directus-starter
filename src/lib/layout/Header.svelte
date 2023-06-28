@@ -3,7 +3,7 @@
 
 <header>
 	<div class="column site-head">
-		<a href=".">Crudinator</a>
+		<a href=".">SvelteKit + Directus Starter</a>
 		<nav>
 			<a href="/about">About</a>
 			<a href="/login">Login</a>
