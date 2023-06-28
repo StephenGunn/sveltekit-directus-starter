@@ -1,6 +1,9 @@
 lockfileVersion: '6.0'
 
 devDependencies:
+  '@directus/sdk':
+    specifier: 11.0.0-beta.1
+    version: 11.0.0-beta.1
   '@playwright/test':
     specifier: ^1.28.1
     version: 1.35.1
@@ -63,6 +66,11 @@ packages:
     dependencies:
       '@jridgewell/gen-mapping': 0.3.3
       '@jridgewell/trace-mapping': 0.3.18
+    dev: true
+
+  /@directus/sdk@11.0.0-beta.1:
+    resolution: {integrity: sha512-1ScVHiLzMSPfrQJ9+usuppc5qnGr1fyqEIFdt4zV/lnMVlxDJjgoTj9whizIE2fMA/Npr2wtNa10iENxwGiNCg==}
+    engines: {node: '>=18.0.0'}
     dev: true
 
   /@esbuild/android-arm64@0.17.19:
