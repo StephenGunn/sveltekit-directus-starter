@@ -15,9 +15,10 @@
 <style>
 	footer {
 		background-color: white;
-		padding-top: 0;
+		padding-top: 2rem;
 		position: sticky;
 		top: 100vh;
 		border-top: 1px solid #ccc;
+		text-align: center;
 	}
 </style>
