@@ -14,7 +14,8 @@ const config = {
 		adapter: adapter(),
 		alias: {
 			"$layout": "src/lib/layout",
-			"$styles": "src/lib/styles"
+			"$styles": "src/lib/styles",
+			"$api": "src/lib/directus"
 		}
 	}
 };

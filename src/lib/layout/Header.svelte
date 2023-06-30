@@ -3,7 +3,7 @@
 
 <header>
 	<div class="column site-head">
-		<a href=".">SvelteKit + Directus Starter</a>
+		<a href="."><span>🤓</span> SvelteKit + Directus</a>
 		<nav>
 			<a href="/blog">Blog</a>
 			<a href="/login">Login</a>
@@ -34,5 +34,18 @@
 	nav {
 		display: flex;
 		gap: 1.5rem;
+	}
+
+	a {
+		text-decoration: none;
+		font-weight: bold;
+		color: rgb(28, 28, 63);
+		display: inline-flex;
+		align-items: center;
+		gap: 1rem;
+	}
+
+	a span {
+		font-size: 150%;
 	}
 </style>
