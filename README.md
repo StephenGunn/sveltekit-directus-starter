@@ -1,7 +1,7 @@
 # sveltekit-directus-starter
 
-This is my attempt to marry two of my favorite technologies in a simple to
-understand way.
+This is my attempt to showcase two of my favorite technologies working together,
+in a simple, understandable way.
 
 ### .env
 
