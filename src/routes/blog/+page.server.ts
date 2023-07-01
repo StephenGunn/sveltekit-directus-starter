@@ -13,10 +13,13 @@ export const load = async ({ cookies }) => {
     
     const posts = await api.request(readItems('posts', {
         fields: [
+            'date_created',
             'id',
             'title',
-            'content'
-        ]
+            'content',
+            'comments.*'
+        ],
+        sort: ['-date_created']
     })).catch(() => {
         // in-case-of-weirdness.
         reset_sdk()
@@ -29,6 +32,4 @@ export const load = async ({ cookies }) => {
     return {
         posts
     }
-    
-    throw error (500)
 };

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Content from '$layout/Content.svelte';
+	import Content from "$layout/Content.svelte";
 	export let data;
 </script>
 
@@ -8,6 +8,7 @@
 	{#each data.posts as post}
 		<article>
 			<h2>{post.title}</h2>
+			<small>{post.date_created}</small>
 			{@html post.content}
 		</article>
 	{:else}

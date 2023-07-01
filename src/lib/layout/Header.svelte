@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { page } from "$app/stores";
 </script>
 
 <header>
@@ -6,8 +7,13 @@
 		<a href="."><span>🤓</span> SvelteKit + Directus</a>
 		<nav>
 			<a href="/blog">Blog</a>
-			<a href="/login">Login</a>
-			<a href="/register">Register</a>
+			{#if $page.data.authorization === "admin" || $page.data.authorization === "user"}
+				<a href="/dashboard">Dashboard</a>
+				<a href="/logout">Logout</a>
+			{:else}
+				<a href="/login">Login</a>
+				<a href="/register">Register</a>
+			{/if}
 		</nav>
 	</div>
 </header>

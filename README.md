@@ -3,6 +3,12 @@
 This is my attempt to showcase two of my favorite technologies working together,
 in a simple, understandable way.
 
+## Goals of this project
+
+- Create an easy to read and follow project structure
+- Utilize SvelteKit's progressive enhancement to allow the app to work with
+  JavaScript Disabled
+
 ### .env
 
 Please setup an .env file with this info:

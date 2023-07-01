@@ -30,7 +30,7 @@ export const handle_tokens = async (cookies: Cookies): Promise<boolean> => {
         const new_tokens = await auth.refresh() as AuthTokens
 
         // pass the new token to the api
-        api.setToken(new_tokens.access_token)
+        if(new_tokens.access_token) api.setToken(new_tokens.access_token)
 
         // some logging for dev
         if (new_tokens && dev) {

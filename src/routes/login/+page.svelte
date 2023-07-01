@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { enhance } from '$app/forms';
-	import { goto } from '$app/navigation';
-	import Content from '$layout/Content.svelte';
+	import { enhance } from "$app/forms";
+	import { goto, invalidateAll } from "$app/navigation";
+	import Content from "$layout/Content.svelte";
 
 	let error: boolean = false;
 </script>
@@ -11,9 +11,10 @@
 		method="POST"
 		use:enhance={() => {
 			return async ({ result }) => {
-				if (result.type === 'success') {
+				if (result.type === "success") {
 					error = false;
-					goto('/dashboard');
+					invalidateAll();
+					goto("/dashboard");
 				} else {
 					error = true;
 				}
