@@ -1,42 +1,22 @@
-import { auth, api } from '$api/client.js'
+import { auth, reset_sdk } from '$api/client.js'
 import { error, redirect } from '@sveltejs/kit'
 import type { Actions } from './$types.js'
-import { dev } from '$app/environment'
+import { handle_tokens } from '$api/handle_tokens.js'
 
 // check to see if we already have auth tokens, if we do, refresh them and redirect to dashboard
 export const load = async ({ cookies }) => {
     // quick escape
-    if(!cookies.get('auth')) return {}
-
-    // if we have tokens, try to refresh them
-    const tokens: AuthTokens = JSON.parse(cookies.get('auth') ?? '')
+    if (!cookies.get('auth')) return {}
     
-    // be doubly sure we have tokens, make typescript happy
-    if (!tokens.access_token) return {};
-    api.setToken(tokens.access_token);
+    // if there are tokens, handle them and then reset the api
+    const refreshed = await handle_tokens(cookies)
+    reset_sdk()
 
-    // get new tokens object
-    const refreshed = await auth.refresh()
+    // If our cookies are valid and we are authenticated, go to the dashboard
+    // we can also control which roles do what later
+    if(refreshed) throw redirect(307, "/dashboard")
 
-    if(refreshed && dev) {
-        console.log("Auth cookies refreshed from /login/+page.server.ts:")
-        console.log(refreshed)
-    }
-
-    // if we can't refresh, zero out the cookies and continue to the login page
-    if(!refreshed) {
-        cookies.set('auth', "", {
-            maxAge: 0
-        })
-    }
-
-    // if we passed all our checks, set our auth cookies
-    // and redirect to the dashboard page
-    cookies.set('auth', JSON.stringify(refreshed), {
-        path: '/'
-    })
-
-    throw redirect(307, "/dashboard")
+    return {}
 }
 
 export const actions = {

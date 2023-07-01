@@ -12,4 +12,7 @@ export const auth = useDirectus(DIRECTUS_URL).use(
     }
 ))
 
+// helper function, can add more shit here later
+export const reset_sdk = () => api.setToken(null)
+
 
