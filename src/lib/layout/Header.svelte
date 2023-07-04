@@ -1,5 +1,12 @@
 <script lang="ts">
-	import { page } from "$app/stores";
+	import type { Writable } from "svelte/store";
+	import { getContext } from "svelte";
+	import type { Role } from "$api/roles.js";
+
+	// Retrieve user store from context
+	const authorization: Writable<Role> = getContext("authorization");
+
+	import Avatar from "./user/Avatar.svelte";
 </script>
 
 <header>
@@ -7,9 +14,10 @@
 		<a href="."><span>🤓</span> SvelteKit + Directus</a>
 		<nav>
 			<a href="/blog">Blog</a>
-			{#if $page.data.authorization === "admin" || $page.data.authorization === "user"}
+			{#if $authorization === "admin" || $authorization === "user"}
 				<a href="/dashboard">Dashboard</a>
 				<a href="/logout">Logout</a>
+				<div class="avatar"><Avatar /></div>
 			{:else}
 				<a href="/login">Login</a>
 				<a href="/register">Register</a>
@@ -29,6 +37,11 @@
 		border-bottom: 1px solid #ccc;
 		background: white;
 		min-height: var(--headerHeight);
+	}
+
+	.avatar {
+		width: 2rem;
+		height: 2rem;
 	}
 
 	.site-head {

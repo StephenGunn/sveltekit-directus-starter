@@ -8,7 +8,14 @@
 	{#each data.posts as post}
 		<article>
 			<h2>{post.title}</h2>
-			<small>{post.date_created}</small>
+			<small
+				>{new Date(post.date_created).toLocaleDateString("en-us", {
+					weekday: "long",
+					year: "numeric",
+					month: "short",
+					day: "numeric"
+				})}</small
+			>
 			{@html post.content}
 		</article>
 	{:else}

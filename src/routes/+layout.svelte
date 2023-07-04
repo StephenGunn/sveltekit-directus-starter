@@ -17,15 +17,18 @@
 
 	export let data: LayoutData;
 
-	// Create a server-safe context store for our user data
-	const user: Writable<User> = writable();
-	$: if (data.user) user.set(data.user);
-	setContext("user", user);
+	// Use context + writable stores to create safe sessions
+	const user: Writable<User | undefined> = writable();
+	const authorization: Writable<Role> = writable("public");
 
-	// Create another server-safe store for our authorization level
-	// Roles can be setup in lib/directus/roles.ts
-	const authorization: Writable<Role> = writable();
-	$: if (data.authorization) authorization.set(data.authorization);
+	// if the server returns new data, update our stores
+	$: if (data) {
+		user.set(data.user);
+		authorization.set(data.authorization);
+	}
+
+	// set our context to create server safe sessions
+	setContext("user", user);
 	setContext("authorization", authorization);
 </script>
 
