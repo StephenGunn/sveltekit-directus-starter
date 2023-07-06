@@ -1,3 +1,5 @@
+
+
 /*
     Directus Collections, add your collections here as you create them
 */
@@ -15,6 +17,8 @@ interface User {
     last_name?: string
     role?: string
     avatar?: string
+    location?: string,
+    authorization: unknown
 }
 
 interface BlogPost {

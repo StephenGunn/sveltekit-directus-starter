@@ -1,9 +1,15 @@
 <script lang="ts">
+	import "$styles/forms.css";
 	import { enhance } from "$app/forms";
-	import { goto, invalidateAll } from "$app/navigation";
+	import { goto, invalidate, invalidateAll } from "$app/navigation";
 	import Content from "$layout/Content.svelte";
+	import { session } from "$lib/stores/session.js";
 
+	export let data;
+
+	// UI controls
 	let error: boolean = false;
+	let logging_in: boolean = false;
 </script>
 
 <Content>
@@ -11,11 +17,15 @@
 		method="POST"
 		use:enhance={() => {
 			return async ({ result }) => {
-				if (result.type === "success") {
-					error = false;
-					invalidateAll();
-					goto("/dashboard");
+				console.log(result);
+				error = false;
+				if (result.type === "success" && result.data?.user) {
+					session.set(result.data.user);
+					goto(`${data.target}?welcome=hi`, {
+						invalidateAll: true
+					});
 				} else {
+					logging_in = false;
 					error = true;
 				}
 			};
@@ -32,35 +42,17 @@
 		{#if error}
 			<div class="error">Cannot login with these creds.</div>
 		{/if}
-		<button>Log in</button>
+		<button on:click={() => (logging_in = true)}>
+			{#if logging_in}
+				Logging in...
+			{:else}
+				Log in
+			{/if}
+		</button>
 	</form>
 </Content>
 
 <style>
-	form {
-		margin: 2rem auto;
-		max-width: 600px;
-		display: flex;
-		flex-flow: column;
-		gap: 1.5rem;
-		border: 1px solid #eee;
-		padding: 2rem;
-		border-radius: 1rem;
-	}
-
-	label {
-		display: flex;
-		gap: 1rem;
-	}
-	label span {
-		display: inline-flex;
-		min-width: 20%;
-	}
-
-	input {
-		flex-grow: 1;
-	}
-
 	.error {
 		background: darkred;
 		color: white;

@@ -1,54 +1,48 @@
-import { auth, reset_sdk } from '$api/client.js'
-import { error, redirect } from '@sveltejs/kit'
+import { api } from '$api/client.js'
+import { error, redirect, fail } from '@sveltejs/kit'
 import type { Actions } from './$types.js'
-import { handle_tokens } from '$api/handle_tokens.js'
+import { handle_tokens } from '$api/handle_session.js'
+import { set_cookies } from '$api/cookies.js'
+import { get_user } from '$api/users.js'
 
-// check to see if we already have auth tokens, if we do, refresh them and redirect to dashboard
-export const load = async ({ cookies }) => {
-    // quick escape
-    if (!cookies.get('auth')) return {}
+// check to see if we already have access tokens
+export const load = async ({ locals, url }) => {
+    // If we have a supplied access token from our hooks.server.ts
+    // we can redirect to the dashboard
+    if (locals.access_token) throw redirect(307, "/dashboard")
     
-    // if there are tokens, handle them and then reset the api
-    const refreshed = await handle_tokens(cookies)
-    reset_sdk()
-
-    // If our cookies are valid and we are authenticated, go to the dashboard
-    // we can also control which roles do what later
-    if(refreshed) throw redirect(307, "/dashboard")
-
-    return {}
+    return {
+        target: url.searchParams.get("redirect") ?? "/dashboard"
+    }
 }
 
 export const actions = {
-    default: async ({ request, cookies }) => {
+    default: async ({ request, cookies, url }) => {
         // grab our data from the response
         const data = await request.formData()
         const email = data.get('email') as string
         const password = data.get('password') as string
 
         // check for email && password
-        if(!email || !password) throw error(406)
+        if(!email || !password) return fail(406, {error: true})
 
-        try {
-            // attempt to login
-            const login = await auth.login(email, password) as AuthTokens
+        // attempt to login
+        const login = await api.login(email, password) as AuthTokens
 
-            // return our auth object as a cookie
-            cookies.set('auth', JSON.stringify(login), {
-                path: '/'
-            })
+        const { user } = await get_user(login.access_token)
 
-            return {
-                success: true
-            }
+        // make sure the login worked.
+        if (!login || !user) return fail(406, {error: true})
 
-        } catch (err) {
-            // TODO: improve this error handling later
-            console.log(err)
+        // set our cookies 
+        const cookies_set = await set_cookies(cookies, login, user)
 
-            // send back a non-descript error
-            throw error(401)
+        // double check to make sure our cookies are set
+        if (!cookies_set) return fail(406, { error: true })
+
+        // return something to let our frontend know the login attempt was successful
+        return {
+            user
         }
-        
     }
 } satisfies Actions

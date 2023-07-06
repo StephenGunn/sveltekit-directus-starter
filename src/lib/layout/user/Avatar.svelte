@@ -1,12 +1,8 @@
 <script lang="ts">
 	// Let's get our user data
-	import type { Writable } from "svelte/store";
-	import { getContext } from "svelte";
+	import { session } from "$stores/session.js";
 
-	// Retrieve user store from context
-	const user: Writable<User> = getContext("user");
-
-	$: initials = `${$user?.first_name?.charAt(0)}${$user?.last_name?.charAt(0)}`;
+	$: initials = `${$session?.first_name?.charAt(0)}${$session?.last_name?.charAt(0)}`;
 
 	// $: avatar_url = `${env.API_URL}/assets/${$session.user?.avatar}?key=avatar`;
 	// use this to dynamically calculate the font size
@@ -17,10 +13,10 @@
 	class="avatar"
 	bind:clientWidth={width}
 	style:font-size="{width / 1.8}px"
-	class:initials={!$user?.avatar}
+	class:initials={!$session?.avatar}
 >
-	{#if $user?.avatar}
-		<img src="" alt="{$user.first_name} {$user.last_name}'s avatar" />
+	{#if $session?.avatar}
+		<img src="" alt="{$session.first_name} {$session.last_name}'s avatar" />
 	{:else}
 		{initials}
 	{/if}

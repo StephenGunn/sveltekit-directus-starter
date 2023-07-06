@@ -1,31 +1,37 @@
-import { auth } from "$api/client.js"
-import { handle_tokens } from '$api/handle_tokens.js'
+import { api } from "$api/client.js"
+import { handle_tokens } from '$api/handle_session.js'
+import { clear_cookies } from "$api/cookies.js"
 import { invalidateAll } from '$app/navigation'
 import { redirect } from "@sveltejs/kit"
+import { DIRECTUS_URL } from "$env/static/private"
 
 export const load = async ({ cookies }) => {
-    // check for auth cookie before anything
-    if (!cookies.get('auth')) throw redirect(307, "/login")
 
     // do the token stuff, need to put a new token into the API
     // so it knows what session to kill... right? 
-    await handle_tokens(cookies)
+    const access_token = await handle_tokens(cookies)
+
+    if (!access_token) throw redirect(307, "/login")
+
+    const refresh_token = cookies.get("refresh_token")!
 
     // kill the session in Directus
     try {
-        //TODO: this works but errors
-        await auth.logout()
+        await fetch(`${DIRECTUS_URL}/auth/logout`, {
+            method: "POST",
+            headers: {
+                "content-type": "application/json"
+            },
+            body: JSON.stringify({
+                refresh_token
+            })
+        })
+        clear_cookies(cookies)
+        return {
+            success: true
+        }
     } catch (err) {
         console.log("Error trying to logout")
         console.error(err)
-    }
-
-    // delete the auth cookie
-    cookies.set('auth', "", {
-        maxAge: 0
-    })
-
-    return {
-        success: true
     }
 }

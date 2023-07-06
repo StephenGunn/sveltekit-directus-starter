@@ -16,9 +16,8 @@
 
 <style>
 	.role {
-		margin: 1rem 0;
 		padding: 1rem;
-		border: 1px solid #eee;
+		border: 1px solid #ccc;
 		border-radius: 1rem;
 		display: flex;
 		gap: 1rem;

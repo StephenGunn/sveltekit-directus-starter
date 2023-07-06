@@ -9,27 +9,20 @@
 	import Header from "$layout/Header.svelte";
 	import Footer from "$layout/Footer.svelte";
 
-	// authorization stuff
-	import { setContext } from "svelte";
-	import { writable, type Writable } from "svelte/store";
+	import { authorization, session } from "$stores/session.js";
+	import { browser } from "$app/environment";
+
 	import type { LayoutData } from "./$types.js";
-	import type { Role } from "$api/roles.js";
+	export let data;
 
-	export let data: LayoutData;
+	const set_session = (data: LayoutData) => {
+		if (browser) {
+			authorization.set(data.authorization ?? "public");
+			if (data.user) session.set(data.user);
+		}
+	};
 
-	// Use context + writable stores to create safe sessions
-	const user: Writable<User | undefined> = writable();
-	const authorization: Writable<Role> = writable("public");
-
-	// if the server returns new data, update our stores
-	$: if (data) {
-		user.set(data.user);
-		authorization.set(data.authorization);
-	}
-
-	// set our context to create server safe sessions
-	setContext("user", user);
-	setContext("authorization", authorization);
+	$: set_session(data);
 </script>
 
 <Header />

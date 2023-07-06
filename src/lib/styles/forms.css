@@ -1,0 +1,26 @@
+form {
+    display: flex;
+    flex-flow: column;
+    gap: 1.5rem;
+    border: 1px solid #ccc;
+    padding: 2rem;
+    border-radius: 1rem;
+}
+
+label {
+    display: flex;
+    gap: 1rem;
+}
+
+label span {
+    display: inline-flex;
+    min-width: 20%;
+    align-items: center;
+}
+
+input {
+    flex-grow: 1;
+    padding: .5rem;
+    border-radius: .5rem;
+    border: 1px solid #ccc;
+}

@@ -1,12 +1,14 @@
 <script lang="ts">
+	import Content from "$layout/Content.svelte";
 </script>
 
 <div class="dash column">
-	<div class="content">
+	<Content>
 		<slot />
-	</div>
+	</Content>
 	<nav>
-		<a href="/dashbaord/profile">Edit Profile</a>
+		<a href="/dashboard">Dashboard</a>
+		<a href="/dashboard/profile">Edit Profile</a>
 		<a href="/dashboard/avatar">Avatar</a>
 	</nav>
 </div>
@@ -22,7 +24,7 @@
 	}
 
 	nav {
-		margin-top: 2rem;
+		margin: 2rem 0;
 		border: 1px solid #ccc;
 		padding: 1rem;
 		border-radius: 1rem;

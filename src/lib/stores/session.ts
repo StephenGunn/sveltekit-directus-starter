@@ -1,11 +1,7 @@
-import { derived, writable, type Writable } from "svelte/store"
-import { roles } from "$api/roles.js"
+import { writable, type Writable } from "svelte/store"
+import type { Role } from "$api/roles.js"
 
+// stores to control the UI
 export const session: Writable<User> = writable({})
+export const authorization: Writable<Role> = writable("public")
 
-// return a string based on session role
-export const authorization = derived(session, ($session) => {
-    if(!$session.role) return "public"
-    if ($session.role in roles) return roles[$session.role]
-    else return "public"
-})

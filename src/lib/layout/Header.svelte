@@ -1,10 +1,5 @@
 <script lang="ts">
-	import type { Writable } from "svelte/store";
-	import { getContext } from "svelte";
-	import type { Role } from "$api/roles.js";
-
-	// Retrieve user store from context
-	const authorization: Writable<Role> = getContext("authorization");
+	import { authorization } from "$stores/session"
 
 	import Avatar from "./user/Avatar.svelte";
 </script>
