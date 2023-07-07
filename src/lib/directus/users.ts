@@ -1,5 +1,5 @@
 import { DIRECTUS_URL } from "$env/static/private"
-import { get_user_role } from "$api/roles.js"
+import { get_user_role, type Role } from "$api/roles.js"
 
 export const get_user = async (access_token: string): Promise<{
     success: boolean
@@ -30,10 +30,14 @@ export const get_user = async (access_token: string): Promise<{
     return {
         success: true,
         user: {
+            id: data.id,
+            avatar: data.avatar,
             first_name: data.first_name,
             last_name: data.last_name,
             location: data.location,
-            authorization: await get_user_role(data.user.role)
+            authorization: await get_user_role(data.role) as Role
         }
     }
 }
+
+
