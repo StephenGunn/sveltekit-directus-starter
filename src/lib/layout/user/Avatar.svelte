@@ -1,10 +1,10 @@
 <script lang="ts">
 	// Let's get our user data
-	import { session } from "$stores/session.js";
+	import { page } from "$app/stores";
 
-	$: initials = `${$session?.first_name?.charAt(0)}${$session?.last_name?.charAt(0)}`;
+	$: initials = `${$page.data.user?.first_name?.charAt(0)}${$page.data.user?.last_name?.charAt(0)}`;
 
-	// $: avatar_url = `${env.API_URL}/assets/${$session.user?.avatar}?key=avatar`;
+	// $: avatar_url = `${env.API_URL}/assets/${$page.data.user.user?.avatar}?key=avatar`;
 	// use this to dynamically calculate the font size
 	let width: number;
 </script>
@@ -13,10 +13,10 @@
 	class="avatar"
 	bind:clientWidth={width}
 	style:font-size="{width / 1.8}px"
-	class:initials={!$session?.avatar}
+	class:initials={!$page.data.user?.avatar}
 >
-	{#if $session?.avatar}
-		<img src="" alt="{$session.first_name} {$session.last_name}'s avatar" />
+	{#if $page.data.user?.avatar}
+		<img src="" alt="{$page.data.user.first_name} {$page.data.user.last_name}'s avatar" />
 	{:else}
 		{initials}
 	{/if}

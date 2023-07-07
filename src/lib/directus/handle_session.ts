@@ -19,19 +19,22 @@ export const directus_session = async (cookies: Cookies, locals: App.Locals): Pr
     // handle our encrypted? user cookie
     let user_cookie: User | undefined
     if (cookies.get('user')) user_cookie = JSON.parse(cookies.get('user')!)
-    
-    console.log("user cookie", user_cookie)
 
     // if we have an access token, return it
-    if (access_token && user_cookie) {
+    if (access_token && user_cookie && refresh_token) {
         locals.access_token = access_token,
+        locals.refresh_token = refresh_token
         locals.user = user_cookie
 
         return
     }
 
     // if we don't have an access token, check for a refresh token
-    if (!refresh_token) return
+    if (!refresh_token) {
+        locals = {}
+        clear_cookies(cookies)
+        return
+    }
 
     // if we have an access token, but no user object, get the user data
     if (access_token && !user_cookie) {
@@ -44,6 +47,9 @@ export const directus_session = async (cookies: Cookies, locals: App.Locals): Pr
         }
         
         // if all is well, return a access token and user object
+        locals.access_token = access_token
+        locals.refresh_token = refresh_token
+        locals.user = user
         return 
     }
 
@@ -73,6 +79,8 @@ export const directus_session = async (cookies: Cookies, locals: App.Locals): Pr
         // Set our locals
         locals.user = user
         locals.access_token = data.access_token
+        locals.refresh_token = data.refresh_token
+
 
         return 
     } catch (err) {

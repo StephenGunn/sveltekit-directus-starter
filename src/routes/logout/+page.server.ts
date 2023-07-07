@@ -1,19 +1,13 @@
 import { api } from "$api/client.js"
-import { handle_tokens } from '$api/handle_session.js'
 import { clear_cookies } from "$api/cookies.js"
 import { invalidateAll } from '$app/navigation'
 import { redirect } from "@sveltejs/kit"
 import { DIRECTUS_URL } from "$env/static/private"
 
-export const load = async ({ cookies }) => {
+export const load = async ({ locals, cookies }) => {
 
-    // do the token stuff, need to put a new token into the API
-    // so it knows what session to kill... right? 
-    const access_token = await handle_tokens(cookies)
-
-    if (!access_token) throw redirect(307, "/login")
-
-    const refresh_token = cookies.get("refresh_token")!
+    // if we don't have an refresh token, leave
+    if (!locals.refresh_token) throw redirect(307, "/login")
 
     // kill the session in Directus
     try {
@@ -23,7 +17,7 @@ export const load = async ({ cookies }) => {
                 "content-type": "application/json"
             },
             body: JSON.stringify({
-                refresh_token
+                refresh_token: locals.refresh_token
             })
         })
         clear_cookies(cookies)

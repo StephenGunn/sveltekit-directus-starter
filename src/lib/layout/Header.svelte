@@ -1,7 +1,10 @@
 <script lang="ts">
-	import { authorization } from "$stores/session"
-
 	import Avatar from "./user/Avatar.svelte";
+
+	import type { Role } from "$api/roles.js";
+	export let authorization: Role;
+
+	$: authorized = authorization === "admin" || authorization === "user";
 </script>
 
 <header>
@@ -9,7 +12,7 @@
 		<a href="."><span>🤓</span> SvelteKit + Directus</a>
 		<nav>
 			<a href="/blog">Blog</a>
-			{#if $authorization === "admin" || $authorization === "user"}
+			{#if authorized}
 				<a href="/dashboard">Dashboard</a>
 				<a href="/logout">Logout</a>
 				<div class="avatar"><Avatar /></div>

@@ -1,7 +1,6 @@
 import { api } from '$api/client.js'
-import { error, redirect, fail } from '@sveltejs/kit'
+import { redirect, fail } from '@sveltejs/kit'
 import type { Actions } from './$types.js'
-import { handle_tokens } from '$api/handle_session.js'
 import { set_cookies } from '$api/cookies.js'
 import { get_user } from '$api/users.js'
 
@@ -11,13 +10,14 @@ export const load = async ({ locals, url }) => {
     // we can redirect to the dashboard
     if (locals.access_token) throw redirect(307, "/dashboard")
     
+    // send our redirect target to the frontend
     return {
         target: url.searchParams.get("redirect") ?? "/dashboard"
     }
 }
 
 export const actions = {
-    default: async ({ request, cookies, url }) => {
+    default: async ({ request, cookies }) => {
         // grab our data from the response
         const data = await request.formData()
         const email = data.get('email') as string

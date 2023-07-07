@@ -9,23 +9,10 @@
 	import Header from "$layout/Header.svelte";
 	import Footer from "$layout/Footer.svelte";
 
-	import { authorization, session } from "$stores/session.js";
-	import { browser } from "$app/environment";
-
-	import type { LayoutData } from "./$types.js";
 	export let data;
-
-	const set_session = (data: LayoutData) => {
-		if (browser) {
-			authorization.set(data.authorization ?? "public");
-			if (data.user) session.set(data.user);
-		}
-	};
-
-	$: set_session(data);
 </script>
 
-<Header />
+<Header authorization={data.user?.authorization ?? "public"} />
 <div class="pad">
 	<slot />
 </div>

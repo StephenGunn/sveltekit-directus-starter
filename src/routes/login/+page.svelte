@@ -1,9 +1,8 @@
 <script lang="ts">
 	import "$styles/forms.css";
 	import { enhance } from "$app/forms";
-	import { goto, invalidate, invalidateAll } from "$app/navigation";
+	import { goto } from "$app/navigation";
 	import Content from "$layout/Content.svelte";
-	import { session } from "$lib/stores/session.js";
 
 	export let data;
 
@@ -17,11 +16,9 @@
 		method="POST"
 		use:enhance={() => {
 			return async ({ result }) => {
-				console.log(result);
 				error = false;
-				if (result.type === "success" && result.data?.user) {
-					session.set(result.data.user);
-					goto(`${data.target}?welcome=hi`, {
+				if (result.type === "success") {
+					goto(data.target, {
 						invalidateAll: true
 					});
 				} else {

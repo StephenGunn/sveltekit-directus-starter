@@ -1,8 +1,10 @@
 <script lang="ts">
-		import { invalidate } from "$app/navigation";
+	import { invalidate } from "$app/navigation";
+	import { onMount } from "svelte";
 
-	// invalidate our session data anytime this route loads
-	invalidate("session")
+	onMount(() => {
+		invalidate("session");
+	});
 
 	export let data;
 </script>
